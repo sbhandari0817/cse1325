@@ -8,6 +8,6 @@ int main (){
 	std::cout<<"Enter the red green and blue ints"<<std::endl;
 	std::cin >>red>>green>>blue;
 	color Test_ints{red,green,blue};
-	std::cout<<Test_ints.to_string()<<std::endl;
+	std::cout<<Test_ints.colorize(Test_ints.to_string())<<std::endl;
 }
 
