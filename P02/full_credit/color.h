@@ -9,7 +9,7 @@
 class color{
 	public:
 		color (int red, int green, int blue);
-		std::string int_tostring();
+		std::string to_string();
 		std::string colorize(std::string text);
 	private:
 	int _red;
