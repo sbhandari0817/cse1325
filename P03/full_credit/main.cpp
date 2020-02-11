@@ -11,5 +11,4 @@ int main (){
 	color values{red, green, blue};
 	std:: cin >> values;
 	std::cout<< values << values.to_string() <<reset<< std::endl;
-	//std::cout<<Test_ints.colorize(Test_ints.to_string())<<std::endl;
 }
