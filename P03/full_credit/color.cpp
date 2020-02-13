@@ -20,7 +20,8 @@ std::string color::to_string(){
 	return "("+std::to_string(_red) +"," + std::to_string(_green)+","+std::to_string(_blue)	+")";
 }
 std::istream &operator>>(std::istream &ist, color &color){
-		ist >> color._red >> color._green >> color._blue; 
-		return ist;
+	char a, b, c, d;
+	ist >>a>>color._red >> b >> color._green >> c >> color._blue >> d; 
+	return ist;
 }
 
