@@ -14,8 +14,7 @@ class Coin{
 		~Coin();
 		void add_note (std:: string _notes);
 		friend std::ostream& operator << (std::ostream& ost, const Coin& coin);
-		//friend istream& operator << (istream& ist, const Coin& coin);
-
+		
 	private:
 		Coin_size _size;
 		Year _year;
