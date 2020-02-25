@@ -22,48 +22,74 @@ int main() {
 std::vector<int> cart;
 std::vector<int> numbers;
 int qua, Product_index;
+Taxed::set_tax_rate(0.0825);
  do {
- 	int i = 0;
- 	double total;
+ 	double total = 0;
+	int i = 0;
     std::cout << menu << '\n';
 	std::cout<< "Enter quantity (0 to exit) and product index: ";
 	std::cin >>qua;
+	if (qua == 0){
+	break;
+	}
 	std::cin>>Product_index;
-	numbers.push_back(qua);
-	cart.push_back(Product_index);
-	for (auto x: cart){
-		if ( x < 3){
+	if (Product_index < 0 || Product_index > 5){
+		std::cout <<"Enter the option from menu"<<std::endl;
+		continue;
+	}
+	std::cout<<"\n"<<"Current Order"<<std::endl;
+	std::cout<<"--------------"<<std::endl;
+	if (Product_index >= 0 && Product_index < 3){
 			try
 			{
-			Taxed p1(items[x],price[x]);
-			p1.set_quantity(numbers[i]);
+			Taxfree p1(items[Product_index],price[Product_index]);
+			p1.set_quantity(qua);
 			total+= p1.price();
-			i++;
 			std::cout << p1 << std::endl; 
 			}
-			catch(std::runtime_error e)
-			{
-				std::cerr<<e.what()<<std::endl;
-			}
-			
-			}
-		else if (x >= 3 || x < 6){
+
+		catch(std::runtime_error e)
+		{
+			std::cerr<<e.what()<<std::endl;
+			continue;
+		}
+		}
+		else{
 			try{
-			Taxfree p1(items[x], price[x]);
-			p1.set_quantity(numbers[i]);
-			i++;
+			Taxed p1(items [Product_index], price[Product_index]);
+			p1.set_quantity(qua);
 			total+= p1.price();
 			std::cout << p1 << std::endl; 
 			}
 			catch(std::runtime_error e)
 			{
 				std::cerr<<e.what()<<std::endl;
+				continue;
 			}
+		}
+	numbers.push_back(qua);
+	cart.push_back(Product_index);
+	int j;
+	for (j = 0; j < (cart.size()-1); j++){
+		int x;
+		x = cart[j];
+		if (x < 3){
+			Taxfree 
+			p1(items[x],price[x]);
+			p1.set_quantity(numbers[i]);
+			total+= p1.price();
+			std::cout << p1 << std::endl; 
 			}
-		else std::cout <<"Out of range or under range"<<std::endl;
-	}
+		else{
+			Taxed p1(items[x], price[x]);
+			p1.set_quantity(numbers[i]);
+			total+= p1.price();
+			std::cout << p1 << std::endl; 
+			}
+		i++;
+	}	
     std::cout<<std::fixed << std::setprecision(2);
-	std::cout <<"Total Price is " << total << std::endl;
+	std::cout<<"\n" <<"Total Price is " << total << std::endl;
 	}while (qua != 0);
 
 }
