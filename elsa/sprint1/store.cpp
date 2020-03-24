@@ -46,6 +46,8 @@ void Store::add_desktop(int desktop, int order){
 int Store:: num_orders(){
 	return orders.size();
 }
+
 Order& order(int index){
 	return orders.at(index);
 }
+
