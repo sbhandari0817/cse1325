@@ -1,5 +1,7 @@
 #ifndef __Desktop_h
 #define __Desktop_h
+#include "vector"
+#include "options.h"
 
 class Desktop{
 	public:
@@ -9,7 +11,7 @@ class Desktop{
 	private:
 		std::vector<Options*> options;
 
-}
+};
 
 #endif 
 

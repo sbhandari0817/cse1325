@@ -1,21 +1,24 @@
 #include "order.h"
+#include "customer.h"
+#include "desktop.h"
 
 Order::Order(Customer& customer):_customer{customer}{
 
 }
-Order::virtual Order(){
+Order::~Order(){
 }
 int Order::add_product(Desktop& desktop){
-	_product.push_back(&desktop);
-	return _product.size()-1;
+	_products.push_back(&desktop);
+	return _products.size()-1;
 }
 double Order::price(){
-	double price = 0.00;
-	for (auto x: _product){
-		price += x._price();
+	double _price = 0.00;
+	for (auto x: _products){
+		_price += x->price();
 	}
-	return price;
+	return _price;
 }
- std::ostream& operator<<(std::ostream& ost, const Order& order){
- 	ost<<"Toatl product: "<<order.add_price()<<"Total Price: "<<order.price();
+ std::ostream& operator<<(std::ostream& ost, Order& order){
+ 	ost << std::to_string(order.price());
+ 	return ost;
  }

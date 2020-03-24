@@ -1,33 +1,51 @@
 #include "store.h"
+#include "customer.h"
+#include "store.h"
+#include "order.h"
 
 void Store::add_customer(Customer& customer){
-	Customer.push_back(customer);
+	customers.push_back(customer);
 }
 int Store:: num_customers(){
-	return Customer.size();
+	return customers.size();
 }
-Customer::Customer& Store::customer(int index){
-	
+Customer& Store::customer(int index){
+	return customers.at(index);
 }
 void Store::add_option(Options& option){
+	options.push_back(&option);
 }
 int Store::num_options(){
+	return options.size();
 }
-Options::Options& Store:: option(int index){
+Options& Store:: option(int index){
+	return *options.at(index);
 }
 int Store:: new_desktop(){
+	Desktop desktop;
+	desktops.push_back(desktop);
+	return (desktops.size()-1);
 }
 void Store:: add_option(int option, int desktop){
+	desktops.at(desktop).add_option(*options.at(option));
 }
-int Store:: num_desktop(){
+int Store:: num_desktops(){
+	return desktops.size();
 }
-Desktop::Desktop& Store:: desktop(index:int){
+Desktop& Store:: desktop(int index){
+	return desktops.at(index);
 }
 int Store::new_order(int customer){
-}
+	Order order = customers.at(customer);
+	orders.push_back(order);
+	return orders.size()-1;
+}	
 void Store::add_desktop(int desktop, int order){
+	orders.at(order).add_product(desktops.at(desktop));
 }
 int Store:: num_orders(){
+	return orders.size();
 }
-Order::Order& order(int index){
+Order& order(int index){
+	return orders.at(index);
 }
