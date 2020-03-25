@@ -1,7 +1,8 @@
-#ifndef __Desktop_h
-#define __Desktop_h
-#include "vector"
+#ifndef __DESKTOP_H
+#define __DESKTOP_H
+
 #include "options.h"
+#include <vector>
 
 class Desktop{
 	public:

@@ -1,8 +1,8 @@
-#ifndef __Customer_h
-#define __Customer_h
-
+#ifndef __CUSTOMER_H
+#define __CUSTOMER_H
 
 #include <string>
+#include <ostream>
 
 class Customer {
 	public:
