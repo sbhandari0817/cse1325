@@ -1,12 +1,13 @@
 #include "mainwin.h"
 #include <iostream>
+#include <sstream>
 
 Mainwin::Mainwin():store{nullptr}{
 	set_default_size(400,200);
 	set_title("ELSA");
 	//put a vetrical box contaier 
-	Gtk::Box *vbox = Gtk::manage(new Gtk::Vbox);
-	add(*vbox);
+	Gtk::Box *vbox = Gtk::manage(new Gtk::VBox);
+    add(*vbox);
 	
 	//Menu 
 	//adding menu bar on top of the window
@@ -15,7 +16,7 @@ Mainwin::Mainwin():store{nullptr}{
 	
 	//File
 	Gtk::MenuItem *menuitem_file = Gtk::manage(new Gtk::MenuItem ("_File",true));
-	Gtk::menubar->append(*menuitem_file);
+	menubar->append(*menuitem_file);
 	Gtk::Menu *filemenu = Gtk::manage(new Gtk::Menu());
 	menuitem_file->set_submenu(*filemenu);
 	
@@ -26,7 +27,7 @@ Mainwin::Mainwin():store{nullptr}{
 	filemenu->append (*menuitem_quit);
 	//View
 	Gtk::MenuItem *menuitem_view = Gtk::manage(new Gtk::MenuItem ("_View",true));
-	Gtk::menubar->append (*menuitem_view);
+	menubar->append (*menuitem_view);
 	Gtk:: Menu *viewmenu = Gtk::manage(new Gtk::Menu());
 	menuitem_view->set_submenu(*viewmenu);
 	
@@ -58,7 +59,7 @@ Mainwin::Mainwin():store{nullptr}{
 	Gtk::MenuItem *insert = Gtk::manage(new Gtk::MenuItem("_Insert", true));
 	menubar->append(*insert);
 	Gtk::Menu *insertmenu = Gtk::manage(new Gtk::Menu());
-	insert->set_submenu(insertmenu);
+	insert->set_submenu(*insertmenu);
 	
 	//Insert Peripheral
 	Gtk::MenuItem *menuitem_peripheral1 = Gtk::manage(new Gtk::MenuItem("_Peripheral",true));
@@ -74,7 +75,7 @@ Mainwin::Mainwin():store{nullptr}{
 
 	//Insert order
 	Gtk::MenuItem *menuitem_order1 = Gtk::manage(new Gtk::MenuItem("_Order", true));
-	menuitem_oder1->signal_activate().connect(
+	menuitem_order1->signal_activate().connect(
 		[this]{this->on_insert_desktop_click();});
 	insertmenu->append(*menuitem_order1);
 
@@ -90,46 +91,67 @@ Mainwin::Mainwin():store{nullptr}{
 	menuitem_help->signal_activate().connect(
 		[this]{this->on_about_click();});
 	menubar->append(*menuitem_help);
-	
+}	
 	
 
-Mainwin::~Mainwin();
+Mainwin::~Mainwin(){ }
 void Mainwin:: on_quit_click(){
 	
 }
 
 void Mainwin:: on_view_peripheral_click(){
-	 for(int i=0; i<store.num_options(); ++i) 
-               std::cout << i << ") " << store.option(i) << "\n";
+	 std::ostringstream oss;
+	 for(int i=0; i< store->num_options(); ++i) 
+          oss << i << ") " << store->option(i) << "\n";
 }
 void Mainwin:: on_view_desktop_click(){
-	 for(int i=0; i<store.num_desktops(); ++i) 
-                    std::cout << i << ") " << store.desktop(i) << "\n";
+	 std::ostringstream oss;
+	 for(int i=0; i< store->num_desktops(); ++i)                
+          oss<< i << ") " << store->desktop(i) << "\n";
 }
 void Mainwin:: on_view_order_click(){
- 	for(int i=0; i<store.num_orders(); ++i) 
-                std::cout << i << ") " << store.order(i) << "\n";
+	std::ostringstream oss;
+ 	for(int i=0; i< store->num_orders(); ++i) 
+          oss<< i << ") " << store->order(i) << "\n";
 }
-void Mainwin:: on_view_customer(){
-	 for(int i=0; i<store.num_customers(); ++i) 
-                std::cout << i << ") " << store.customer(i) << "\n";
+void Mainwin:: on_view_customer_click(){
+	 std::ostringstream oss;
+	 for(int i=0; i< store->num_customers(); ++i) 
+           oss<< i << ") " << store->customer(i) << "\n";
 }
-void Mainwin:: on_insert_peripheral_click(){
-	 std::cout << "Name of new peripheral? ";
-            std::string s;
-            std::getline(std::cin, s);
-            std::cout << "Cost? ";
-            double cost;
-            if (std::cin >> cost) {
-                Options option{s, cost};
-                store.add_option(option);
-            } else {
-                std::cin.clear();
-                std::cerr << "#### INVALID PRICE ####\n\n";
-                std::cin.ignore(32767, '\n');
+void Mainwin::on_insert_peripheral_click(){
+	std::string s = get_string("Enter the Name of peripheral");
+	double cost = get_double("Enter the cost");
+    Options option{s, cost};
+    store->add_option(option);
+}
+void Mainwin::on_insert_desktop_click(){
+ int desktop = store->new_desktop();
+            while(true) {
+                std::cout << store->desktop(desktop) << "\n\n";
+                for(int i=0; i<store->num_options(); ++i) 
+                   std::cout << i << ") " << store->option(i) << '\n';
+                std::cout << "\nAdd which peripheral (-1 when done)? ";
+                int option;
+                std::cin >> option; std::cin.ignore(32767, '\n');
+                if(option == -1) break;
+                try {
+                    store->add_option(option, desktop);
+                } catch(std::exception& e) {
+                    std::cerr << "#### INVALID OPTION ####\n\n";
+                }
             }
+
+}
+void Mainwin:: on_insert_customer_click(){
+	std::string name = get_string("Enter Name of customer");
+	std::string phone = get_string("Customer Phone Number");
+	std::string email = get_string("Customer email address");
+	Customer customer (name, phone, email);
+	store->add_customer(customer);
 }
 
+/*
 void Mainwin::on_button_click() {
     EntryDialog edialog{*this, "<big>EntryDialog Demo</big>", true};
     edialog.set_secondary_text("What <i>shall</i> we display <b>today</b>?", true);
@@ -140,6 +162,6 @@ void Mainwin::on_button_click() {
     mdialog.run();
 }
 	
-	
+*/	
 
-}
+

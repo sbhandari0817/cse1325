@@ -22,13 +22,12 @@ class Mainwin : public Gtk::Window {
 		std::string get_string(std::string prompt);
 		double get_double(std::string prompt);
 		int get_int(std::string prompt);
-		void set_data(std::string, s);
-		void set_data(std::string, s);
-		void set_msg(std::string, s);
+		void set_data(std::string s);
+		void set_msg(std::string s);
 	private:
 		Store* store;
-		Gtk::label* data;
-		Gtk::label* msg;
+		Gtk::Label* data;
+		Gtk::Label* msg;
 		
 };
 #endif
