@@ -1,16 +1,14 @@
 CXXFLAGS += --std=c++17
 GTKFLAGS = `/usr/bin/pkg-config gtkmm-3.0 --cflags --libs`
 
-main: main.o mainwin.o entrydialog.o *.h
-	$(CXX) $(CXXFLAGS) mainwin.o entrydialog.o $(GTKFLAGS) -o main
+elsa: main.o mainwin.o entrydialog.o store.o customer.o options.o desktop.o order.o
+	$(CXX) $(CXXFLAGS) main.o mainwin.o entrydialog.o store.o customer.o options.o desktop.o order.o $(GTKFLAGS) -o elsa
 main.o: main.cpp *.h
-	$(CXX) $(CXXFLAGS) -c main.cpp $(GTKFLAGS) -o main.o
-
+	$(CXX) $(CXXFLAGS) -c main.cpp $(GTKFLAGS)
 mainwin.o: mainwin.cpp *.h
-	$(CXX) $(CXXFLAGS) -c mainwin.cpp $(GTKFLAGS) -o mainwin.o
-
+	$(CXX) $(CXXFLAGS) -c mainwin.cpp $(GTKFLAGS)
 entrydialog.o: entrydialog.cpp *.h
-	$(CXX) $(CXXFLAGS) -c entrydialog.cpp $(GTKFLAGS) -o entrydialog.o
+	$(CXX) $(CXXFLAGS) -c entrydialog.cpp $(GTKFLAGS)
 store.o: store.cpp *.h
 	$(CXX) $(CXXFLAGS) -c store.cpp
 customer.o: customer.cpp *.h
@@ -22,5 +20,8 @@ desktop.o: desktop.cpp *.h
 order.o: order.cpp *.h
 	$(CXX) $(CXXFLAGS) -c order.cpp
 clean:
-	rm -f *.o *.gch main test
+	rm -f *.o *.gch elsa
+
+
+	
 
