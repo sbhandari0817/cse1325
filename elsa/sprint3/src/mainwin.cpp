@@ -117,8 +117,11 @@ Mainwin::Mainwin():store{new Store},filename{"untitled.store"}{
 	//About under help
 	Gtk::MenuItem *menuitem_about = Gtk::manage(new Gtk::MenuItem("_About",true));
 	menuitem_about->signal_activate().connect([this]{this->on_about_click();});
-	helpmenu->append(*menuitem_about);
-
+	helpmenu->append(*menuitem_about);	
+	//Ester egg under help
+	Gtk::MenuItem *Easter = Gtk::manage(new Gtk::MenuItem("_Easter Egg",true));
+	Easter->signal_activate().connect([this]{this->on_easter_egg_click();});
+	helpmenu->append(*Easter);
 	//Data Display
 	data = Gtk::manage(new Gtk::Label{"", Gtk::ALIGN_START, Gtk::ALIGN_START});
 	data->set_hexpand();
@@ -291,17 +294,17 @@ void Mainwin::on_save_as_click() {
           Gtk::FileChooserAction::FILE_CHOOSER_ACTION_SAVE);
     dialog.set_transient_for(*this);
 
-    auto filter_store = Gtk::FileFilter::create();
-    filter_store->set_name("store files");
-    filter_store->add_pattern("*.store");
-    dialog.add_filter(filter_store);
+    auto filter_elsa = Gtk::FileFilter::create();
+    filter_elsa->set_name("elsa files");
+    filter_elsa->add_pattern("*.elsa");
+    dialog.add_filter(filter_elsa);
  
     auto filter_any = Gtk::FileFilter::create();
     filter_any->set_name("Any files");
     filter_any->add_pattern("*");
     dialog.add_filter(filter_any);
 
-    dialog.set_filename("untitled.store");
+    dialog.set_filename("untitled.elsa");
 
     //Add response buttons the the dialog:
     dialog.add_button("_Cancel", 0);
@@ -328,17 +331,17 @@ void Mainwin::on_open_click() {
           Gtk::FileChooserAction::FILE_CHOOSER_ACTION_OPEN);
     dialog.set_transient_for(*this);
 
-    auto filter_store = Gtk::FileFilter::create();
-    filter_store->set_name("STORE files");
-    filter_store->add_pattern("*.store");
-    dialog.add_filter(filter_store);
+    auto filter_elsa = Gtk::FileFilter::create();
+    filter_elsa->set_name("ELSA files");
+    filter_elsa->add_pattern("*.elsa");
+    dialog.add_filter(filter_elsa);
  
     auto filter_any = Gtk::FileFilter::create();
     filter_any->set_name("Any files");
     filter_any->add_pattern("*");
     dialog.add_filter(filter_any);
 
-    dialog.set_filename("untitled.store");
+    dialog.set_filename("untitled.elsa");
 
     //Add response buttons the the dialog:
     dialog.add_button("_Cancel", 0);
@@ -361,6 +364,51 @@ void Mainwin::on_open_click() {
 void Mainwin::on_new_store_click() {
     store = new Store();
 }
+void Mainwin::on_easter_egg_click() {
+		Customer c{"Bugs Bunny", "817-ACA-RROT", "bugs@loony.tunes"};          store->add_customer(c);
+		c = Customer{"Elastigirl", "817-STR-ETCH", "helen@incredibles.movie"}; store->add_customer(c);
+		c = Customer{"Tuck and Roll", "817-UFI-RED2", "circus@bugs.life"};     store->add_customer(c);
+		c = Customer{"Tiana", "817-NOG-RIMM", "princess@lily.pad"};            store->add_customer(c);
+
+		Options o{"CPU: 2.6 GHz Xeon 6126T", 2423.47};         store->add_option(o);
+		o = Options{"CPU: 2.4 GHz Core i7-8565U", 388.0};      store->add_option(o);
+		o = Options{"CPU: 2.2 GHz AMD Opteron", 37.71};        store->add_option(o);
+		o = Options{"CPU: 300 MHz AM3351BZCEA30R ARM", 11.03}; store->add_option(o);
+		o = Options{"CPU: 240 MHz ColdFire MCF5", 17.33};      store->add_option(o);
+
+		o = Options{"2 GB RAM", 17.76};                        store->add_option(o);
+		o = Options{"4 GB RAM", 22.95};                        store->add_option(o);
+		o = Options{"8 GB RAM", 34.99};                        store->add_option(o);
+		o = Options{"16 GB RAM", 92.99};                       store->add_option(o);
+		o = Options{"32 GB RAM", 134.96};                      store->add_option(o);
+		o = Options{"64 GB RAM", 319.99};                      store->add_option(o);
+
+		o = Options{"0.5 TB SSD", 79.99};                      store->add_option(o);
+		o = Options{"1 TB SSD", 109.99};                       store->add_option(o);
+		o = Options{"2 TB SSD", 229.99};                       store->add_option(o);
+		o = Options{"4 TB SSD", 599.99};                       store->add_option(o);
+
+		o = Options{"1 TB PC Disk", 44.83};                    store->add_option(o);
+		o = Options{"2 TB Hybrid Disk", 59.99};                store->add_option(o);
+		o = Options{"4 TB Hybrid Disk", 93.98};                store->add_option(o);
+
+		int desktop = store->new_desktop();
+		store->add_option(0, desktop);
+		store->add_option(9, desktop);
+		store->add_option(14, desktop);
+
+		desktop = store->new_desktop();
+		store->add_option(1, desktop);
+		store->add_option(7, desktop);
+		store->add_option(17, desktop);
+
+		desktop = store->new_desktop();
+		store->add_option(5, desktop);
+		store->add_option(7, desktop);
+		store->add_option(15, desktop);
+}
+
+
 
 
 
