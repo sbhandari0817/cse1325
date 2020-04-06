@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iomanip>
 
-Mainwin::Mainwin():store{new Store}{
+Mainwin::Mainwin():store{new Store},filename{"untitled.store"}{
 
 	set_default_size(800,600);
 	set_title("ELSA");
@@ -24,18 +24,22 @@ Mainwin::Mainwin():store{new Store}{
 	
 	//new_store
 	Gtk::MenuItem *menuitem_new = Gtk::manage(new Gtk::MenuItem("_New Store",true));
+	menuitem_new->signal_activate().connect([this]{this->on_new_store_click();});
 	filemenu->append(*menuitem_new);
 	
 	//save
 	Gtk::MenuItem *menuitem_save = Gtk::manage(new Gtk::MenuItem("_Save",true));
+	menuitem_save->signal_activate().connect([this]{this->on_save_click();});
 	filemenu->append(*menuitem_save);
 	
 	//Save as
 	Gtk::MenuItem *menuitem_saveas = Gtk::manage(new Gtk::MenuItem("_Save as",true));
+	menuitem_saveas->signal_activate().connect([this]{this->on_save_as_click();});
 	filemenu->append(*menuitem_saveas);
 	
 	//open 
 	Gtk::MenuItem *menuitem_open = Gtk::manage(new Gtk::MenuItem("_Open",true));
+	menuitem_open->signal_activate().connect([this]{this ->on_open_click();});	
 	filemenu->append(*menuitem_open);
 
 	//quit
@@ -270,6 +274,92 @@ int Mainwin::get_int(std::string prompt){
 	}catch(std::exception& e){
 		return -1;
 	}
+}
+void Mainwin::on_save_click() {
+        try {
+            std::ofstream ofs{filename};
+            store->save(ofs);
+            if(!ofs) throw std::runtime_error{"Error writing file"};
+        } catch(std::exception& e) {
+            Gtk::MessageDialog{*this, "Unable to save elsa: "}.run();
+        }
+}
+
+
+void Mainwin::on_save_as_click() {
+    Gtk::FileChooserDialog dialog("Please choose a file",
+          Gtk::FileChooserAction::FILE_CHOOSER_ACTION_SAVE);
+    dialog.set_transient_for(*this);
+
+    auto filter_store = Gtk::FileFilter::create();
+    filter_store->set_name("store files");
+    filter_store->add_pattern("*.store");
+    dialog.add_filter(filter_store);
+ 
+    auto filter_any = Gtk::FileFilter::create();
+    filter_any->set_name("Any files");
+    filter_any->add_pattern("*");
+    dialog.add_filter(filter_any);
+
+    dialog.set_filename("untitled.store");
+
+    //Add response buttons the the dialog:
+    dialog.add_button("_Cancel", 0);
+    dialog.add_button("_Save", 1);
+
+    int result = dialog.run();
+
+    if (result == 1) {
+        try {
+            std::ofstream ofs{dialog.get_filename()};
+            store->save(ofs);
+            if(!ofs) throw std::runtime_error{"Error writing file"};
+        } catch(std::exception& e) {
+            Gtk::MessageDialog{*this, "Unable to save elsa: "}.run();
+        }
+    }
+	filename = dialog.get_filename();
+}
+
+
+void Mainwin::on_open_click() {
+
+    Gtk::FileChooserDialog dialog("Please choose a file",
+          Gtk::FileChooserAction::FILE_CHOOSER_ACTION_OPEN);
+    dialog.set_transient_for(*this);
+
+    auto filter_store = Gtk::FileFilter::create();
+    filter_store->set_name("STORE files");
+    filter_store->add_pattern("*.store");
+    dialog.add_filter(filter_store);
+ 
+    auto filter_any = Gtk::FileFilter::create();
+    filter_any->set_name("Any files");
+    filter_any->add_pattern("*");
+    dialog.add_filter(filter_any);
+
+    dialog.set_filename("untitled.store");
+
+    //Add response buttons the the dialog:
+    dialog.add_button("_Cancel", 0);
+    dialog.add_button("_Open", 1);
+
+    int result = dialog.run();
+
+    if (result == 1) {
+        try {
+            delete store;
+            std::ifstream ifs{dialog.get_filename()};
+            store = new Store{ifs};
+            if(!ifs) throw std::runtime_error{"File contents bad"};
+        } catch (std::exception& e) {
+            Gtk::MessageDialog{*this, "Unable to open the file"}.run();
+        }
+    }
+
+}
+void Mainwin::on_new_store_click() {
+    store = new Store();
 }
 
 
