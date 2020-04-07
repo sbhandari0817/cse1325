@@ -17,14 +17,16 @@ std::ostream& operator<<(std::ostream& ost, const Order& order) {
 
 void Order::save(std::ostream& ost){
     ost<<_customer << '\n';
-	for (auto p : _products)ost<<*p;
-	ost <<'\n'<<this->price()<<std::endl;
+	ost<<_products.size();
+	for (auto p : _products)p->save(ost);
 }
 
 Order::Order(std::istream& ist){
      _customer = new Customer(ist);
-    int i;
-    int size = _products.size();
+    int size;
+	ist >> size;
+	ist.ignore(32767, '\n');
+	int i;
 	for (i = 0; i < size; i++){
 		_products.push_back(new Desktop(ist));	
 	} 	

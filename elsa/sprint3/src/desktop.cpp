@@ -17,10 +17,13 @@ std::ostream& operator <<(std::ostream& ost,const Desktop& desktop){
 	return ost;
 }
 void Desktop::save(std::ostream& ost){
-	for (auto o: options)ost<<"\n"<<*o;
+	ost<<options.size() << '\n';
+	for (auto o: options)o->save(ost);
 }
 Desktop::Desktop(std::istream& ist){
-	int size = options.size();
+	int size;
+	ist >> size;
+	ist.ignore(32767, '\n');
 	int i;
 	for (i = 0; i < size; i++){
 		options.push_back(new Options(ist));	

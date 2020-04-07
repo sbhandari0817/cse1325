@@ -5,14 +5,38 @@
 //
 Store::Store(){}
 Store::Store(std::istream& ist){
-	int size = orders.size();
+	int size;
+	ist >> size;
+	ist.ignore(32767, '\n');
 	int i;
 	for (i = 0; i < size; i++){
-		orders.push_back(ist);	
+		customers.push_back(ist);	
+	}
+	ist >> size;
+	ist.ignore(32767, '\n');
+	for (i = 0; i < size; i++){
+		options.push_back(new Options(ist));
+	}
+	ist >> size;
+	ist.ignore(32767, '\n');
+	for (i = 0; i < size; i++){
+		desktops.push_back(ist);
+	}
+	ist >> size;
+	ist.ignore(32767, '\n');
+	for (i = 0; i < size; i++){
+		orders.push_back(ist);
 	}
 }
 void Store::save(std::ostream& ost){
-	for (auto p: orders)ost<<p;
+	ost<<customers.size()<<'\n';
+	for (auto c: customers)c.save(ost);
+	ost<<options.size()<<'\n';
+	for (auto o: options)o->save(ost);
+	ost<<desktops.size()<<'\n';
+	for (auto d: desktops)d.save(ost);
+	ost << orders.size() << '\n';
+	for (auto p: orders)p.save(ost);
 }
 void Store::add_customer(Customer& customer) {customers.push_back(customer);}
 int Store::num_customers() {return customers.size();}

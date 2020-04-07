@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iomanip>
 
-Mainwin::Mainwin():store{new Store},filename{"untitled.store"}{
+Mainwin::Mainwin():store{new Store},filename{"untitled.elsa"}{
 
 	set_default_size(800,600);
 	set_title("ELSA");
@@ -295,7 +295,7 @@ void Mainwin::on_save_as_click() {
     dialog.set_transient_for(*this);
 
     auto filter_elsa = Gtk::FileFilter::create();
-    filter_elsa->set_name("elsa files");
+    filter_elsa->set_name("ELSA files");
     filter_elsa->add_pattern("*.elsa");
     dialog.add_filter(filter_elsa);
  
@@ -311,7 +311,7 @@ void Mainwin::on_save_as_click() {
     dialog.add_button("_Save", 1);
 
     int result = dialog.run();
-
+    filename = dialog.get_filename();
     if (result == 1) {
         try {
             std::ofstream ofs{dialog.get_filename()};
@@ -321,7 +321,7 @@ void Mainwin::on_save_as_click() {
             Gtk::MessageDialog{*this, "Unable to save elsa: "}.run();
         }
     }
-	filename = dialog.get_filename();
+	
 }
 
 
