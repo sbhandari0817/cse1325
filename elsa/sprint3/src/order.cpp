@@ -1,23 +1,23 @@
 #include "order.h"
 
-Order::Order(Customer& customer) : _customer{new Customer(customer)} {}
+Order::Order(Customer& customer) : _customer{&customer} {}
 Order::~Order() {}
 int Order::add_product(Desktop& desktop) {_products.push_back(&desktop); return _products.size()-1;}
 double Order::price() const {
-    double pr = 0;
-    for(auto p : _products) pr += p->price();
-    return pr;
+    double price = 0;
+    for(auto p : _products) price += p->price();
+    return price;
 }
 std::ostream& operator<<(std::ostream& ost, const Order& order) {
-    ost << "Customer: " << order._customer;
-    for(auto p : order._products) ost << "\n  " << *p;
-    ost << "\nTotal price: $" << order.price();
+    ost << "Customer: " << *order._customer;
+    for(auto p : order._products) ost << "\n  " << *p<< "\n price: $" << p->price()<<"\n";
+    ost << "\nTotal price: $" << order.price()<<'\n';
     return ost;
 }
 
 void Order::save(std::ostream& ost){
-    ost<<_customer << '\n';
-	ost<<_products.size();
+        _customer->save(ost);
+	ost<<_products.size()<<'\n';
 	for (auto p : _products)p->save(ost);
 }
 
@@ -28,7 +28,7 @@ Order::Order(std::istream& ist){
 	ist.ignore(32767, '\n');
 	int i;
 	for (i = 0; i < size; i++){
-		_products.push_back(new Desktop(ist));	
+		_products.push_back(new Desktop{ist});	
 	} 	
 }
 

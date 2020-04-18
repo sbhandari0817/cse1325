@@ -18,7 +18,9 @@ void Options::save(std::ostream& ost){
 	ost<< _name << '\n' << _cost << std::endl;
 }
 Options::Options(std::istream& ist){
-	ist>> _name >> _cost;
+	std::getline(ist,_name);
+	ist>> _cost;
+	ist.ignore(32767,'\n');
 }
 
 

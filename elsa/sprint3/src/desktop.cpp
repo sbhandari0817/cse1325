@@ -26,7 +26,7 @@ Desktop::Desktop(std::istream& ist){
 	ist.ignore(32767, '\n');
 	int i;
 	for (i = 0; i < size; i++){
-		options.push_back(new Options(ist));	
+		options.push_back(new Options{ist});	
 	}
 }
 

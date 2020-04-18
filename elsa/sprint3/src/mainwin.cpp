@@ -1,9 +1,10 @@
 #include "mainwin.h"
 #include "entrydialog.h"
 #include <sstream>
+#include <fstream>
 #include <iomanip>
 
-Mainwin::Mainwin():store{new Store},filename{"untitled.elsa"}{
+Mainwin::Mainwin():store{nullptr}{
 
 	set_default_size(800,600);
 	set_title("ELSA");
@@ -138,6 +139,8 @@ Mainwin::Mainwin():store{new Store},filename{"untitled.elsa"}{
 	
 
 	vbox->show_all();
+
+	on_new_store_click();
 }
 
 
@@ -304,22 +307,16 @@ void Mainwin::on_save_as_click() {
     filter_any->add_pattern("*");
     dialog.add_filter(filter_any);
 
-    dialog.set_filename("untitled.elsa");
+    dialog.set_filename(filename);
 
     //Add response buttons the the dialog:
     dialog.add_button("_Cancel", 0);
     dialog.add_button("_Save", 1);
 
     int result = dialog.run();
-    filename = dialog.get_filename();
     if (result == 1) {
-        try {
-            std::ofstream ofs{dialog.get_filename()};
-            store->save(ofs);
-            if(!ofs) throw std::runtime_error{"Error writing file"};
-        } catch(std::exception& e) {
-            Gtk::MessageDialog{*this, "Unable to save elsa: "}.run();
-        }
+       filename = dialog.get_filename();
+ 		on_save_click();
     }
 	
 }
@@ -341,7 +338,7 @@ void Mainwin::on_open_click() {
     filter_any->add_pattern("*");
     dialog.add_filter(filter_any);
 
-    dialog.set_filename("untitled.elsa");
+    dialog.set_filename(filename);
 
     //Add response buttons the the dialog:
     dialog.add_button("_Cancel", 0);
@@ -351,8 +348,9 @@ void Mainwin::on_open_click() {
 
     if (result == 1) {
         try {
-            delete store;
-            std::ifstream ifs{dialog.get_filename()};
+            delete store; store = nullptr;
+			filename = dialog.get_filename();
+            std::ifstream ifs{filename};
             store = new Store{ifs};
             if(!ifs) throw std::runtime_error{"File contents bad"};
         } catch (std::exception& e) {
@@ -362,7 +360,11 @@ void Mainwin::on_open_click() {
 
 }
 void Mainwin::on_new_store_click() {
+	delete store;
     store = new Store();
+	filename = "untitled.elsa";
+	set_data("");
+	set_msg("New store Created");
 }
 void Mainwin::on_easter_egg_click() {
 		Customer c{"Bugs Bunny", "817-ACA-RROT", "bugs@loony.tunes"};          store->add_customer(c);

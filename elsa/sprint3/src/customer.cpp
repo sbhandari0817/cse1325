@@ -11,5 +11,7 @@ void Customer::save(std::ostream& ost){
 	ost<<_name << '\n' << _phone <<'\n'<< _email <<std::endl;
 }
 Customer::Customer(std::istream& ist){
-	ist>>_name>>_phone>>_email;
+	std::getline (ist, _name);
+	std::getline(ist, _phone);
+	std::getline(ist, _email);
 }
