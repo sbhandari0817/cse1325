@@ -12,7 +12,7 @@ class Options{
 		double cost();
 		virtual std::string to_string() const;
 		Options(std::istream& ist);
-		void save(std::ostream& ost);
+		virtual void save(std::ostream& ost);
 		friend std::ostream& operator<<(std::ostream& ost,const Options& options);
 	 protected:
 	 	std::string _name;
