@@ -12,8 +12,8 @@ class Polynomial {
 
     void add_term(double coefficient, double exponent);
     double operator()(double x);   // Evaluate the polynomial for x
-    void solve(double min, double max, int nthreads = 10, 
-               double slices = 100000000, double precision = 0.00001);
+    void solve(double min, double max, int nthreads = 24, 
+ double slices = 1000000000, double precision = 0.00001);
     std::vector<double> roots();
     friend std::ostream& operator<<(std::ostream& ost, const Polynomial& polynomial);
   private:

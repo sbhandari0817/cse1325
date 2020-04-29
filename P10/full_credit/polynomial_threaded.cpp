@@ -41,7 +41,7 @@ void Polynomial::solve(double min, double max, int nthreads, double slices, doub
 	int i = 0;
 	std::thread t[nthreads];
 	for (i = 0; i < nthreads; i++){ 
-	  t[i]{&this] {this.solve_recursive(new_min, new_max, 1, new_slices,precision);}};
+	  t[i]= std::thread ([&] {solve_recursive(new_min, new_max, i+1, new_slices,precision);});
 	new_max = new_max+nthreads;
 	new_min = new_min+nthreads;
 
@@ -52,7 +52,7 @@ void Polynomial::solve(double min, double max, int nthreads, double slices, doub
 }
 // (Internal) recursive search for polynomial solutions
 void Polynomial::solve_recursive(double min, double max, int tid, double slices, double precision, int recursions) {
-    //Polynomial& f = *this;
+    Polynomial& f = *this;
     double delta = (max - min) / slices;
     double x1 = min;
     double y1 = f(min);
