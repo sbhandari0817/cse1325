@@ -14,15 +14,14 @@ YOUR Timing:
 
 Without threads:
 
-
-
+real	0m4.061s
+user	0m3.572s
+sys	0m0.364s
 
 With 2 threads:
-
-
-
-
-
+real	0m3.912s
+user	0m3.451s
+sys	0m0.364s
 
 With 4 threads:
 
