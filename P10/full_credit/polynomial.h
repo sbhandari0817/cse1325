@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <iostream>
+#include <thread> 
 #include "term.h"
 
 class Polynomial {
@@ -11,7 +12,7 @@ class Polynomial {
 
     void add_term(double coefficient, double exponent);
     double operator()(double x);   // Evaluate the polynomial for x
-    void solve(double min, double max, int nthreads = 1, 
+    void solve(double min, double max, int nthreads = 10, 
                double slices = 100000000, double precision = 0.00001);
     std::vector<double> roots();
     friend std::ostream& operator<<(std::ostream& ost, const Polynomial& polynomial);

@@ -29,13 +29,30 @@ double Polynomial::operator()(double x) {
 // Clear the roots and invoke recursive solution search
 //   nthreads is the number of threads requested
 //   tid is a thread id - useful for logger.h messages
+
 void Polynomial::solve(double min, double max, int nthreads, double slices, double precision) {
     _roots = {};
-    solve_recursive(min, max, 1, slices, precision);
+
+//Threading parts of the code
+
+	double new_max = min+(max - min)/slices;
+	double new_min = max-(max - min)/slices;
+	double new_slices = slices/nthreads;
+	int i = 0;
+	std::thread t[nthreads];
+	for (i = 0; i < nthreads; i++){ 
+	  t[i]{&this] {this.solve_recursive(new_min, new_max, 1, new_slices,precision);}};
+	new_max = new_max+nthreads;
+	new_min = new_min+nthreads;
+
+	}
+	for (i = 0; i < nthreads; i++){
+		t[i].join();
+	}
 }
 // (Internal) recursive search for polynomial solutions
 void Polynomial::solve_recursive(double min, double max, int tid, double slices, double precision, int recursions) {
-    Polynomial& f = *this;
+    //Polynomial& f = *this;
     double delta = (max - min) / slices;
     double x1 = min;
     double y1 = f(min);
